@@ -8,7 +8,7 @@ const UserTemp = require("../Schema/userTempSchema");
 const router = express.Router();
 var nodemailer = require("nodemailer");
 dotenv.config();
-const sendemail = async (gmail,url)=>{
+function sendemail(gmail,url){
   console.log(gmail);
   console.log(url);
 var transport = nodemailer.createTransport(
@@ -27,9 +27,15 @@ var mailOptions = {
   text:url
 
 }
- const data =   await transport.sendMail(mailOptions)
- console.log(data);
-console.log("Unable to print now");
+transport.sendMail(mailOptions).then((err,info)=>{
+  console.log(err,info);
+  if(err){
+   console.log(err);
+  }
+   else{
+ console.log(info.response);
+   }
+})
 }
 function sendemailadmin(url){
   var transport = nodemailer.createTransport(
@@ -58,7 +64,6 @@ function sendemailadmin(url){
   })
   }
 router.post("/user/new",(req,res) =>{
-  console.log("Got Request to this Route");
   if(req.body.gmail===undefined){return res.send("Invalid Signup Credentials");}
     User.findOne({reg_no:req.body.reg_no}).then((resp)=>{
           if(resp===null){
@@ -73,13 +78,12 @@ router.post("/user/new",(req,res) =>{
                 x.password = req.body.password;
                 x.token = token;
                 console.log(x);
-                x.save().then(async (z)=>{
-                  await sendemail(req.body.gmail,url);
+                x.save().then((z)=>{
+                  sendemail(req.body.gmail,url);
                   return res.send("Email has been sent for verification");
                 }).catch((err)=>{console.log(err);})
               }
               else{
-                console.log("NEw User printing");
                 let newuser = new UserTemp({
                   gmail:req.body.gmail,
                   name:req.body.name,
