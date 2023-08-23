@@ -27,10 +27,10 @@ var mailOptions = {
 }
  transport.sendMail(mailOptions).then((err,info)=>{
   if(err){
-  //  console.log(err);
+   console.log(err);
   }
    else{
-//  console.log(info.response);
+  console.log(info.response);
    }
 })
 }
