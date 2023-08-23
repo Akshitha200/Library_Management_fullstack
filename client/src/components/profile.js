@@ -16,7 +16,7 @@ const Profile = () =>{
          })
          .catch((err)=>{console.log(err);})  
         }
-         });
+         },[]);
          const updateProfile=()=>{
            let name = user.name;
            let password=user.password;
