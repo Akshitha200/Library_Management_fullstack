@@ -8,7 +8,7 @@ const UserTemp = require("../Schema/userTempSchema");
 const router = express.Router();
 var nodemailer = require("nodemailer");
 dotenv.config();
-function sendemail(gmail,url){
+const sendemail = async (gmail,url)=>{
   console.log(gmail);
   console.log(url);
 var transport = nodemailer.createTransport(
@@ -27,15 +27,8 @@ var mailOptions = {
   text:url
 
 }
-transport.sendMail(mailOptions).then((err,info)=>{
-  console.log(err,info);
-  if(err){
-   console.log(err);
-  }
-   else{
- console.log(info.response);
-   }
-})
+ const data =   await transport.sendMail(mailOptions)
+ console.log(data);
 console.log("Unable to print now");
 }
 function sendemailadmin(url){
@@ -80,8 +73,8 @@ router.post("/user/new",(req,res) =>{
                 x.password = req.body.password;
                 x.token = token;
                 console.log(x);
-                x.save().then((z)=>{
-                  sendemail(req.body.gmail,url);
+                x.save().then(async (z)=>{
+                  await sendemail(req.body.gmail,url);
                   return res.send("Email has been sent for verification");
                 }).catch((err)=>{console.log(err);})
               }
