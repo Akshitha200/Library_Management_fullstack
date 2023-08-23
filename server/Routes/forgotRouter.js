@@ -7,7 +7,7 @@ const ForgotSchema = require("../Schema/forgotSchema");
 var nodemailer = require("nodemailer");
 const router = express.Router();
 
-function sendemail(gmail,url){
+const  sendemail = async (gmail,url) => {
     var transport = nodemailer.createTransport(
       {
         service:'gmail',
@@ -24,14 +24,8 @@ function sendemail(gmail,url){
       text:url
     
     }
-     transport.sendMail(mailOptions).then((err,info)=>{
-      if(err){
-       // console.log(err);
-      }
-       else{
-    //  console.log(info.response);
-       }
-    })
+    const data = await transport.sendMail(mailOptions)
+    
     }
 router.post("/admin/new", (req,res)=>{
     if(req.body.gmail===undefined){return res.send({error:"Invalid  Credentials",err:1});}
@@ -46,8 +40,8 @@ router.post("/admin/new", (req,res)=>{
               ForgotSchema.findOne({gmail:req.body.gmail,admin:1}).then((x)=>{
                if(x!==null){
                 x.token = token;
-                x.save().then((z)=>{
-                  sendemail(req.body.email,url);
+                x.save().then(async (z)=>{
+                 await sendemail(req.body.email,url);
                   return res.send({data:"Email Sent for Verfication"});
 
                 })
@@ -55,8 +49,8 @@ router.post("/admin/new", (req,res)=>{
                }
                else{
                 let newadmin = new ForgotSchema({gmail:req.body.gmail,token:token,admin:1});
-                newadmin.save().then((admin)=>{
-                 sendemail(req.body.gmail,url);
+                newadmin.save().then(async (admin)=>{
+                await sendemail(req.body.gmail,url);
                  return res.send({data:"Email Verification sent"});
                 })
                 .catch((err)=>{
@@ -78,12 +72,12 @@ router.post("/user/new", (req,res)=>{
             else{
               const text = String(new Date().getMilliseconds()) + req.body.gmail;
               const token = sha1(text);
-              const url = `http://localhost:${process.env.REACT_PORT}/forgot/verify/${token}`;
+              const url = `${process.env.FRONTEND_URL}forgot/verify/${token}`;
               ForgotSchema.findOne({gmail:req.body.gmail,admin:0}).then((x)=>{
                if(x!==null){
                 x.token = token;
-                x.save().then((z)=>{
-                  sendemail(req.body.gmail,url);
+                x.save().then(async (z)=>{
+                  await sendemail(req.body.gmail,url);
                   return res.send({data:"Email Sent for Verfication"});
 
                 })
@@ -91,8 +85,8 @@ router.post("/user/new", (req,res)=>{
                }
                else{
                 let newadmin = new ForgotSchema({gmail:req.body.gmail,token:token});
-                newadmin.save().then((admin)=>{
-                 sendemail(req.body.gmail,url);
+                newadmin.save().then(async (admin)=>{
+                await sendemail(req.body.gmail,url);
                  return res.send({data:"Email Verification sent"});
                 })
                 .catch((err)=>{

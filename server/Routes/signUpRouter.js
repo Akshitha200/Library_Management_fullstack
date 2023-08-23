@@ -8,7 +8,7 @@ const UserTemp = require("../Schema/userTempSchema");
 const router = express.Router();
 var nodemailer = require("nodemailer");
 dotenv.config();
-function sendemail(gmail,url){
+const sendemail = async (gmail,url)=>{
   console.log(gmail);
   console.log(url);
 var transport = nodemailer.createTransport(
@@ -27,17 +27,10 @@ var mailOptions = {
   text:url
 
 }
-transport.sendMail(mailOptions).then((err,info)=>{
-  console.log(err,info);
-  if(err){
-   console.log(err);
-  }
-   else{
- console.log(info.response);
-   }
-})
+ const data = await transport.sendMail(mailOptions)
+ console.log(data);
 }
-function sendemailadmin(url){
+const sendemailadmin = async (url)=>{
   var transport = nodemailer.createTransport(
     {
       service:'gmail',
@@ -54,14 +47,8 @@ function sendemailadmin(url){
     text:url
   
   }
-   transport.sendMail(mailOptions).then((err,info)=>{
-    if(err){
-     // console.log(err);
-    }
-     else{
-  //  console.log(info.response);
-     }
-  })
+   const data = await transport.sendMail(mailOptions)
+
   }
 router.post("/user/new",(req,res) =>{
   if(req.body.gmail===undefined){return res.send("Invalid Signup Credentials");}
@@ -78,8 +65,8 @@ router.post("/user/new",(req,res) =>{
                 x.password = req.body.password;
                 x.token = token;
                 console.log(x);
-                x.save().then((z)=>{
-                  sendemail(req.body.gmail,url);
+                x.save().then(async (z)=>{
+                  await sendemail(req.body.gmail,url);
                   return res.send("Email has been sent for verification");
                 }).catch((err)=>{console.log(err);})
               }
@@ -92,8 +79,8 @@ router.post("/user/new",(req,res) =>{
                   token:token
               });
   
-              newuser.save().then((resp)=>{
-                sendemail(req.body.gmail,url);
+              newuser.save().then(async (resp)=>{
+                await sendemail(req.body.gmail,url);
                 return res.send("Email has been sent for verification");
               }).catch((err)=>{
              console.log(err);
@@ -120,8 +107,8 @@ router.post("/admin/new",(req,res)=>{
                if(x!==null){
                 x.name = req.body.name;
                 x.password = req.body.password;
-                x.save().then((z)=>{
-                  sendemailadmin(url);
+                x.save().then(async (z)=>{
+                  await sendemailadmin(url);
                   return res.send("Email has been seen to higher authority for verification");
 
                 })
@@ -129,8 +116,8 @@ router.post("/admin/new",(req,res)=>{
                }
                else{
                 let newadmin = new AdminTemp({name:req.body.name,gmail:req.body.gmail,password:req.body.password,token:token});
-                newadmin.save().then((admin)=>{
-                 sendemailadmin(url);
+                newadmin.save().then(async (admin)=>{
+                 await sendemailadmin(url);
                  return res.send("Email has been seen to higher authority for verification");
                 })
                 .catch((err)=>{
