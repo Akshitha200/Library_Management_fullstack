@@ -6,8 +6,8 @@ export const getBooks = ()=>{
       console.log(isAdminAuth().token);
       return axios.get(`${API_URL}/admin/book`,{
        headers:{ Authorization:`Bearer ${isAdminAuth().token}` }
-      }).
-      then((resp)=>{
+      })
+      .then((resp)=>{
          return resp.data.resp;
       })
    }
@@ -43,7 +43,7 @@ export const getBookDetail = (props) =>{
    })
 }
 export const BookManage = (book) =>{
-  if(book.take==1){
+  if(book.take===1){
     return axios.put(`${API_URL}/admin/take/${book.ref_no}/${book.reg_no}`,
     {},{headers:{Authorization:`Bearer ${isAdminAuth().token}`}})
     .then((resp)=>{

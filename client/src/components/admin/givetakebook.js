@@ -1,5 +1,4 @@
 import React,{useState} from "react";
-import { useNavigate } from "react-router-dom";
 import {BookManage} from "../../controllers/book";
 import "../signin.css";
  const MangageBook = () =>{
@@ -14,7 +13,6 @@ import "../signin.css";
           settake(1);
         }
     }     
-    const navigate = useNavigate();
          
          const Submit = (book) =>{
             let b = book.target;
@@ -25,7 +23,7 @@ import "../signin.css";
             };
             BookManage(x)
             .then((resp)=>{
-                if(resp.data.err==1){
+                if(resp.data.err===1){
                     seterr(resp.data.error);
                 }
                 else{

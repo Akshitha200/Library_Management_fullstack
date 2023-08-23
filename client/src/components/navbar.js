@@ -2,7 +2,6 @@ import React from "react";
 import {isUserAuth} from "../controllers/user";
 import { isAdminAuth } from "../controllers/admin";
 import { useNavigate } from "react-router-dom";
-const base_url = ""
 const Navbar = (props) => {
   const navigate = useNavigate();
   const LogOut = () =>{

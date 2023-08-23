@@ -1,10 +1,7 @@
 import React,{useState} from "react";
-import { useNavigate } from "react-router-dom";
 import {forgotPass} from "../controllers/user";
-import { useParams } from "react-router-dom";
 import "./signin.css";
  const ForgotPass = () =>{
-         const navigate = useNavigate();
          const [msg,setmsg] = useState("");
          const [err, seterr] = useState("");
          const [student,setStudent]=useState(1);
@@ -15,7 +12,7 @@ import "./signin.css";
                 ,admin:!student
               };
               forgotPass(x).then((resp)=>{
-                if(resp.data.err==undefined){
+                if(resp.data.err===undefined){
                     setmsg(resp.data.data);
                     seterr("");
                   document.getElementById("form3").reset();

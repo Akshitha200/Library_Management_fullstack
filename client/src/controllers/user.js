@@ -14,7 +14,7 @@ export const getCart = (props) =>{
 }
 export const signIn = (props) =>{
     let to="user";
-    if(props.isuser==0){to="admin";}
+    if(props.isuser===0){to="admin";}
     
     return  axios.post(`${API_URL}/signin/${to}/`,{
         gmail:props.gmail,
@@ -77,7 +77,7 @@ export const updateUser = (obj) =>{
 export const  createUser = (user) =>{
    
     let isstu ="user";
-    if(user.isuser==0){isstu="admin";user.reg_no=undefined;}
+    if(user.isuser===0){isstu="admin";user.reg_no=undefined;}
     console.log(user);
      return axios.post(`${API_URL}/signup/${isstu}/new`,{
       name:user.name,

@@ -12,10 +12,8 @@ const API_URL=process.env.REACT_APP_API_URL;
        axios.get(`${API_URL}/users/book/search/${book_name}`)
        .then((resp)=>{
         if(resp.data.bk){
-          if(resp.data.bk.length==0){return seterr("No Books Found");}
+          if(resp.data.bk.length===0){return seterr("No Books Found");}
           else{
-            let x = resp.data.bk;
-            
             return setbooks(resp.data.bk);}
         }
         else{return seterr("No Books Found");}

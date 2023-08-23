@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./components/navbar";
 import Home from "./components/home";
-import { Route, Routes, useParams } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { getBooks } from "./controllers/book";
 import SignIn from "./components/signin";
 import SignUp from "./components/signup";
@@ -10,15 +10,12 @@ import Cart from "./components/cart/cart";
 import Profile from "./components/profile";
 import { isUserAuth, getUser } from "./controllers/user";
 import MangageBook from "./components/admin/givetakebook";
-import { getBookDetail } from "./controllers/book";
 import ForgotPassword from "./components/forgotPassword";
 import ForgotPass from "./components/forgotPass";
 import Loading from "./components/loading";
 import RemoveBook from "./components/book/removeBook";
 import Search from "./components/search";
-import axios from 'axios';
 import { Token } from './components/token';
-const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -46,7 +43,7 @@ function App() {
             let x = [{}];
             let f = new Map();
             if (respx.data.resp.borrowed) {
-              respx.data.resp.borrowed.map((e) => { f.set(e.book_id, e); })
+              respx.data.resp.borrowed.map((e) => { f.set(e.book_id, e); return 0;})
               resp.map((e) => {
                 if (f.has(e._id)) {
                   let hh = e;
@@ -55,6 +52,7 @@ function App() {
                   hh.takendate = gg.takendate;
                   x.push(hh);
                 }
+                return 0;
               });
               x.splice(0, 1);
               setBorrowed(x);
@@ -64,6 +62,7 @@ function App() {
               let fx = new Map();
               respx.data.resp.list.map((e) => {
                 fx.set(e.book_id, e);
+                return 0;
               });
               resp.map((e) => {
                 if (fx.has(e._id)) {
@@ -73,6 +72,7 @@ function App() {
                   hh.takendate = gg.takendate;
                   y.push(hh);
                 }
+                return 0;
               });
               y.splice(0, 1);
               setList(y);
@@ -107,7 +107,7 @@ function App() {
 
     }, 500);
 
-  }, []);
+  },[]);
   
   return (
     <div className="App">

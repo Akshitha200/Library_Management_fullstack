@@ -1,4 +1,3 @@
-import React,{useState,useEffect} from "react";
 import CartItem from "./cartitem";
 const Cartk=(props)=>{
 

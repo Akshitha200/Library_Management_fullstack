@@ -30,7 +30,7 @@ const AddBook = () =>{
   
     addBook(form).then((resp)=>{
       console.log(resp);
-      if(resp.data.err==1){
+      if(resp.data.err===1){
        seterr(resp.data.error);
        setmsg("");
       }

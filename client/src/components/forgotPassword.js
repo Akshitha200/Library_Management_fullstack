@@ -1,10 +1,8 @@
 import React,{useState} from "react";
-import { useNavigate } from "react-router-dom";
 import {forgotPassword} from "../controllers/user";
 import { useParams } from "react-router-dom";
 import "./signin.css";
  const ForgotPassword = () =>{
-         const navigate = useNavigate();
          const [msg,setmsg] = useState("");
          const [err, seterr] = useState("");
          const [student,setStudent]=useState(1);
@@ -18,7 +16,7 @@ import "./signin.css";
               };
               forgotPassword(x).then((resp)=>{
                 console.log(resp);
-                if(resp.data.err==undefined){
+                if(resp.data.err===undefined){
                  setmsg(resp.data.data);
                  document.getElementById("form1").reset();
                 }

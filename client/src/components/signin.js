@@ -15,8 +15,8 @@ import "./signin.css";
               };
               signIn(x).then((resp)=>{
                 console.log(resp);
-                if(resp.data.err!=1){
-                  if(student==0){
+                if(resp.data.err!==1){
+                  if(student===0){
                     localStorage.setItem("libadmin",JSON.stringify(resp.data));
                     navigate("/");
                   }
